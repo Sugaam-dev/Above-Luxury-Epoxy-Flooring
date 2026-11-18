@@ -146,7 +146,7 @@ export default function SurfacesSection() {
                 </span>
               </motion.h2>
             </div>
-            <motion.p {...fu(0.15)} className="font-body text-stellar/50 text-sm md:text-base leading-relaxed max-w-md lg:text-right">
+            <motion.p {...fu(0.15)} className="font-body text-white font-medium text-base md:text-lg leading-relaxed max-w-md lg:text-right">
               Next-generation surface solutions where material science meets visual artistry.
               The best alternative to conventional tiles — built to outlast and outshine.
             </motion.p>
