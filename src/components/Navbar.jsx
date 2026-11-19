@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_LINKS = [
+  { label: 'AI Studio', href: '#ai-studio' },
   { label: 'Gardens',  href: '#landscapes' },
   { label: 'Surfaces', href: '#surfaces' },
   { label: 'Hypercare',href: '#hypercare' },

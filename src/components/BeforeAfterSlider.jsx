@@ -1,8 +1,11 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function BeforeAfterSlider({
-  beforeBg, afterBg,
+  beforeBg,
+  afterBg,
+  beforeImage,
+  afterImage,
   beforeLabel = 'Before',
   afterLabel  = 'After ABOVE°',
   height      = '400px',
@@ -12,6 +15,11 @@ export default function BeforeAfterSlider({
   const isDragging            = useRef(false);
   const containerRef          = useRef(null);
 
+  // Reset slider position to 50% whenever a new transformation image is loaded
+  useEffect(() => {
+    setPos(50);
+  }, [afterImage]);
+
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
   const updatePos = useCallback((clientX) => {
@@ -19,6 +27,17 @@ export default function BeforeAfterSlider({
     const rect = containerRef.current.getBoundingClientRect();
     setPos(clamp(((clientX - rect.left) / rect.width) * 100, 2, 98));
   }, []);
+
+  // Keyboard navigation for accessibility
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setPos(p => clamp(p - 5, 2, 98));
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      setPos(p => clamp(p + 5, 2, 98));
+    }
+  };
 
   // Mouse
   const onMouseDown = (e) => { isDragging.current = true; updatePos(e.clientX); };
@@ -30,10 +49,20 @@ export default function BeforeAfterSlider({
   const onTouchMove  = (e) => { if (isDragging.current) updatePos(e.touches[0].clientX); };
   const onTouchEnd   = ()  => { isDragging.current = false; };
 
+  const effectiveBeforeImg = beforeImage || (typeof beforeBg === 'string' && (beforeBg.startsWith('data:') || beforeBg.startsWith('blob:') || beforeBg.startsWith('http') || beforeBg.startsWith('/')) ? beforeBg : null);
+  const effectiveAfterImg = afterImage || (typeof afterBg === 'string' && (afterBg.startsWith('data:') || afterBg.startsWith('blob:') || afterBg.startsWith('http') || afterBg.startsWith('/')) ? afterBg : null);
+
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden rounded-2xl select-none touch-none ${className}`}
+      tabIndex={0}
+      role="slider"
+      aria-label="Before and After transformation comparison slider"
+      aria-valuenow={Math.round(pos)}
+      aria-valuemin={2}
+      aria-valuemax={98}
+      onKeyDown={onKeyDown}
+      className={`relative overflow-hidden rounded-2xl select-none touch-none focus:outline-none focus:ring-2 focus:ring-forest/40 ${className}`}
       style={{ height, cursor: 'ew-resize' }}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
@@ -43,26 +72,49 @@ export default function BeforeAfterSlider({
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Before (full width background) */}
-      <div className="absolute inset-0" style={{ background: beforeBg }} />
+      {/* Before (full width background or image) */}
+      {effectiveBeforeImg ? (
+        <img
+          src={effectiveBeforeImg}
+          alt={beforeLabel}
+          className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+        />
+      ) : (
+        <div className="absolute inset-0" style={{ background: beforeBg }} />
+      )}
 
       {/* After (clipped to left of handle) */}
-      <div
-        className="absolute inset-0 transition-none"
-        style={{
-          background: afterBg,
-          clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`,
-        }}
-      />
+      {effectiveAfterImg ? (
+        <div
+          className="absolute inset-0 transition-none overflow-hidden"
+          style={{
+            clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`,
+          }}
+        >
+          <img
+            src={effectiveAfterImg}
+            alt={afterLabel}
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+          />
+        </div>
+      ) : (
+        <div
+          className="absolute inset-0 transition-none"
+          style={{
+            background: afterBg,
+            clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`,
+          }}
+        />
+      )}
 
       {/* Labels */}
-      <div className="absolute bottom-4 left-4 z-10">
+      <div className="absolute bottom-4 left-4 z-10 pointer-events-none">
         <span className="font-ui text-[10px] tracking-[0.25em] uppercase px-2.5 py-1 rounded-full"
           style={{ background: 'rgba(46,125,50,0.85)', color: 'white', backdropFilter: 'blur(6px)' }}>
           {afterLabel}
         </span>
       </div>
-      <div className="absolute bottom-4 right-4 z-10">
+      <div className="absolute bottom-4 right-4 z-10 pointer-events-none">
         <span className="font-ui text-[10px] tracking-[0.25em] uppercase px-2.5 py-1 rounded-full"
           style={{ background: 'rgba(0,0,0,0.55)', color: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(6px)' }}>
           {beforeLabel}

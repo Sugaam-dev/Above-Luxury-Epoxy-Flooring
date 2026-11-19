@@ -253,11 +253,14 @@ export default function Hero() {
             transition={{ delay: 0.85, duration: 0.7 }}
             className="flex flex-col sm:flex-row gap-3 mb-8"
           >
-            <a href="#landscapes" className="btn-green w-full sm:w-auto shadow-lg shadow-emerald-900/40">
+            <a href="#ai-studio" className="btn-green w-full sm:w-auto shadow-lg shadow-emerald-900/40">
+              Try AI Studio ✨
+            </a>
+            <a href="#landscapes" className="btn-outline-white w-full sm:w-auto">
               Explore Services →
             </a>
             <a href="#contact" className="btn-outline-white w-full sm:w-auto">
-              Book Free Consultation
+              Book Free Visit
             </a>
           </motion.div>
 

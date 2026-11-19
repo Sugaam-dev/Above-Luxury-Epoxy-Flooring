@@ -1,6 +1,7 @@
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import AITransformationStudio from './components/AITransformation/AITransformationStudio';
 import LandscapesSection from './components/LandscapesSection';
 import SurfacesSection from './components/SurfacesSection';
 import HypercareSection from './components/HypercareSection';
@@ -16,6 +17,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <AITransformationStudio />
         <LandscapesSection />
         <SurfacesSection />
         <HypercareSection />

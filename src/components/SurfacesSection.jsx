@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import BeforeAfterSlider from './BeforeAfterSlider';
 import ScrollableGalleryFrame from './ScrollableGalleryFrame';
@@ -56,10 +56,11 @@ const FLOOR_AFTER = `
   linear-gradient(145deg,#0d0d1a,#1a1040,#0d0d1a)
 `;
 
-function PortfolioCard({ item, index }) {
+const PortfolioCard = forwardRef(function PortfolioCard({ item, index }, ref) {
   const [hovered, setHovered] = useState(false);
   return (
     <motion.div
+      ref={ref}
       layout
       initial={{ opacity: 0, scale: 0.92 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -110,7 +111,7 @@ function PortfolioCard({ item, index }) {
       </motion.div>
     </motion.div>
   );
-}
+});
 
 export default function SurfacesSection() {
   const [activeTag, setActiveTag] = useState('all');
