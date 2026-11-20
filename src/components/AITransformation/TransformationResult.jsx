@@ -60,7 +60,7 @@ export default function TransformationResult({
           <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Architectural Scanner Graphic */}
-          <div className="relative w-20 h-20 mb-5">
+          <div className="relative w-20 h-20 mb-6">
             <div className="absolute inset-0 rounded-full border-2 border-forest/30 animate-spin" style={{ animationDuration: '6s' }} />
             <div className="absolute inset-2 rounded-full border-2 border-dashed border-emerald-400/50 animate-spin" style={{ animationDuration: '10s', animationDirection: 'reverse' }} />
             <div className="absolute inset-0 flex items-center justify-center text-emerald-400">
@@ -68,17 +68,9 @@ export default function TransformationResult({
             </div>
           </div>
 
-          <div className="font-ui text-[9px] tracking-[0.25em] uppercase text-emerald-400 mb-1.5 font-bold">
-            Cloudflare Workers AI · Flux.2
-          </div>
-
-          <h4 className="font-heading font-bold text-lg sm:text-xl text-white mb-2 max-w-md">
-            {statusStepMessage || 'Reimagining your space...'}
+          <h4 className="font-heading font-bold text-lg sm:text-xl text-white mb-6 max-w-md">
+            {statusStepMessage || 'Generating Image...'}
           </h4>
-
-          <p className="font-body text-white/60 text-xs max-w-sm leading-relaxed mb-5">
-            Analyzing perspective, lighting vectors, and material textures for <span className="text-emerald-300 font-medium">{selectedCategoryObj?.title}</span>.
-          </p>
 
           {/* Progress bar indicator */}
           <div className="w-full max-w-xs bg-white/10 h-1 rounded-full overflow-hidden">

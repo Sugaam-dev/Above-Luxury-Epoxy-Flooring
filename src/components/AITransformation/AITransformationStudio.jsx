@@ -97,7 +97,7 @@ export default function AITransformationStudio() {
     setState('idle');
   }, [imagePreview, revokeGeneratedImage]);
 
-  // Execute Cloudflare AI generation
+  // Execute AI image generation
   const handleGenerate = async () => {
     if (!imageFile && !imagePreview) return;
 
@@ -110,7 +110,7 @@ export default function AITransformationStudio() {
 
     setState('generating');
     setErrorMessage('');
-    setStatusStepMessage('Reimagining your space with Cloudflare Workers AI...');
+    setStatusStepMessage('Generating Image...');
 
     try {
       const result = await generateAITransformation({
@@ -133,7 +133,7 @@ export default function AITransformationStudio() {
       if (controller.signal.aborted) {
         return;
       }
-      console.error('Cloudflare AI Generation Failed:', err);
+      console.error('AI Generation Failed:', err);
       setErrorMessage(err.message || 'Transformation failed. Please retry.');
       setState('error');
     } finally {
@@ -192,9 +192,6 @@ export default function AITransformationStudio() {
                     Transformation Setup
                   </h3>
                 </div>
-                <span className="font-ui text-[9px] uppercase tracking-wider text-ash font-medium">
-                  Cloudflare Workers AI · FLUX
-                </span>
               </div>
 
               {/* Photo Upload Area (Compact) */}
@@ -233,20 +230,15 @@ export default function AITransformationStudio() {
                   {state === 'generating' ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span className="tracking-wide uppercase">Reimagining Your Space...</span>
+                      <span className="tracking-wide uppercase">Generating Image...</span>
                     </>
                   ) : (
                     <>
                       <Wand2 className="w-4 h-4 text-emerald-300" />
-                      <span className="tracking-wide uppercase">Generate AI Transformation</span>
+                      <span className="tracking-wide uppercase">Generate Image</span>
                     </>
                   )}
                 </button>
-
-                <div className="flex items-center justify-between text-[10px] font-ui text-ash/80 mt-2 px-1">
-                  <span>Perspective & geometry preserved</span>
-                  <span>Fast Cloudflare AI</span>
-                </div>
               </div>
 
             </div>

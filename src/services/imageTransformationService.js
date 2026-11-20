@@ -134,7 +134,7 @@ export async function transformImageWithCloudflare({
     throw new ImageTransformationError('A valid transformation prompt is required.', 400);
   }
 
-  onProgressStep('Analyzing your space...');
+  onProgressStep('Generating Image...');
 
   // Convert input to a real Blob/File
   const imageBlob = await convertSourceToBlob(image);
@@ -157,7 +157,7 @@ export async function transformImageWithCloudflare({
   }
 
   try {
-    onProgressStep('Reimagining your space with Cloudflare Workers AI...');
+    onProgressStep('Generating Image...');
 
     // Post to Cloudflare Worker. Do NOT set Content-Type header manually; browser adds multipart boundary.
     const response = await fetch(CLOUDFLARE_WORKER_URL, {
@@ -167,7 +167,7 @@ export async function transformImageWithCloudflare({
     });
 
     clearTimeout(timeoutId);
-    onProgressStep('Rendering architectural details...');
+    onProgressStep('Generating Image...');
 
     // Parse JSON response safely
     const contentType = response.headers.get('content-type') || '';
@@ -190,7 +190,7 @@ export async function transformImageWithCloudflare({
     if (!response.ok || !responseData.success) {
       if (response.status === 429) {
         throw new ImageTransformationError(
-          'Cloudflare AI service is experiencing high demand (quota or rate limit reached). Please wait a moment and try again.',
+          'AI service is experiencing high demand (quota or rate limit reached). Please wait a moment and try again.',
           429,
           responseData
         );
@@ -214,7 +214,7 @@ export async function transformImageWithCloudflare({
       throw new ImageTransformationError('AI service completed but did not return any image data.', 500, responseData);
     }
 
-    onProgressStep('Finalizing your transformation...');
+    onProgressStep('Generating Image...');
 
     // Convert Base64 response to Blob and Blob URL
     const { blob, imageUrl, mimeType: resolvedMime } = base64ToBlobUrl(responseData.image, responseData.mimeType || 'image/png');
@@ -254,7 +254,7 @@ export async function transformImageWithCloudflare({
     }
 
     throw new ImageTransformationError(
-      err.message || 'An unexpected network error occurred while contacting the Cloudflare Workers AI service.',
+      err.message || 'An unexpected network error occurred while contacting the AI service.',
       500,
       err
     );
@@ -278,7 +278,7 @@ export async function generateAITransformation({
   onProgressStep = () => {},
   signal = null
 }) {
-  onProgressStep('Analyzing your space...');
+  onProgressStep('Generating Image...');
 
   const { category: catObj, prompt } = buildTransformationPrompt(category, customInstructions);
 
